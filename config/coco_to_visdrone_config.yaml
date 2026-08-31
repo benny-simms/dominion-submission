@@ -1,0 +1,21 @@
+# in order to infer a yolo model pretrained on the COCO dataset on VisDrone
+# we must construct a mapping from COCO to VisDrone
+# this mapping is not perfect, nor is it bijective, so many categories are either merged or thrown out
+class_map:
+  0: 0 # person
+  1: 2 # bicycle
+  2: 3 # car
+  3: 9 # motorcycle
+  5: 8 # bus
+  7: 5 # truck
+label_idx_to_id:
+  0: person
+  2: bicycle
+  3: car
+  5: truck
+  8: bus
+  9: motorcycle
+
+
+
+

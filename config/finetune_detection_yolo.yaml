@@ -1,0 +1,12 @@
+data_config_file_path: ./config/visdrone_data_config.yaml
+training:
+  epochs: 300
+  patience: 20
+  batch: 16
+  imgsz: 800
+  save: True
+  save_period: 5
+  device: cpu
+  workers: 8
+  single_cls: True
+  multi_scale: False
