@@ -6,7 +6,7 @@ training:
   imgsz: 800
   save: True
   save_period: 5
-  device: cpu
+  device: 0
   workers: 8
   single_cls: True
   multi_scale: False

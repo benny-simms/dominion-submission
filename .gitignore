@@ -1,6 +1,8 @@
+.vscode/*
 data/*
 models/*
 notebooks/*
+weights/*
 # Project exclude paths
 /report_viewer/frontend/node_modules/
 /report_viewer/frontend/node_modules/@babel/parser/
