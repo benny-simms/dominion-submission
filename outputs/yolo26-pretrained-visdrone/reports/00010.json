@@ -1,0 +1,12 @@
+{
+    "n_ground_truth": 19,
+    "n_detections": 1,
+    "true_positives": 1,
+    "false_positives": 0,
+    "false_negatives": 18,
+    "precision": 1.0,
+    "recall": 0.05263157894736842,
+    "precision_large": 1.0,
+    "precision_small": 0.0,
+    "average_true_positive_detection": 2864.8251953125
+}

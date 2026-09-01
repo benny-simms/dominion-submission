@@ -1,0 +1,5 @@
+Without a confidence threshold, precision: 0.69, recall: 0.12.
+With a confidence threshold of 0.25, precision: 0.69, recall: 0.12.
+This threshold retains 99.47% of predictions
+F-1.00 score: 2.00, Precision-recall curve AUC 0.10.
+mAP: 0.10, mAP_50: 0.15, mAP_75: 0.11

@@ -1,0 +1,21 @@
+misc:
+  use_cpu: True
+  detections_display_output_dir: ./outputs/yolo26-pretrained-visdrone/
+  display_detections: False
+  beta: 1.0
+  human_review_threshold: 0.95
+model:
+    type: yolo
+    model_path: ./models/yolo26-detection/yolo26n.pt
+    merge_overlapping_bboxes: False
+    suppress_overlapping_bboxes: True
+    single_class_detection: True
+dataset:
+  type: vis_drone
+  data_path: ./data/VisDrone2019-DET/
+  split_type: test
+  split_filename: ./config/splits/test_split.dat
+  single_class_detection: True
+dataloader:
+  batch_size: 1
+  num_workers: 0

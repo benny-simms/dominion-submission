@@ -4,23 +4,23 @@ set -e
 
 echo -e "$Starting Dominion Dynamics Vision Console...$"
 
-echo -e "$Launching FastAPI backend...$"
+echo -e "$Launching FastAPI backend$"
 cd report_viewer
 cd backend
 uvicorn main:app --reload --port 8000 &
 BACKEND_PID=$!
 cd ..
 
-echo -e "$Launching React/Vite frontend...$"
+echo -e "$Launching React/Vite frontend$"
 cd frontend
 npm run dev &
 FRONTEND_PID=$!
 cd ..
 
-echo -e "$Waiting for frontend to initialize...$"
-sleep 3
+echo -e "$Initializing frontend$"
+sleep 2
 
-echo -e "$Opening browser at http://localhost:5173$"
+echo -e "$Opening browser at: http://localhost:5173$"
 
 if command -v open >/dev/null 2>&1; then
     open http://localhost:5173
