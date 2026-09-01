@@ -3017,13 +3017,13 @@
     ],
     "precision_large": 0.8054794520547945,
     "precision_small": 0.5839793281653747,
-    "human_review_confidence": 0.95,
     "human_review_percentage": 0.9997646505060014,
     "above_threshold_acc": 1.0,
     "optimal_confidence_threshold": 0.2519371509552002,
     "model_precision": 0.6914893617021277,
     "model_recall": 0.1223817368792657,
-    "mAP": 0.10,
-    "mAP_50": 0.21,
-    "mAP_75": 0.10
+    "human_review_confidence": 0.95,
+    "mAP": 0.09980832785367966,
+    "mAP_50": 0.1500307023525238,
+    "mAP_75": 0.11023063957691193
 }

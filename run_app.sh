@@ -2,7 +2,7 @@
 
 set -e
 
-echo -e "$Starting Dominion Dynamics Vision Console...$"
+echo -e "$Starting Report Viewer Application$"
 
 echo -e "$Launching FastAPI backend$"
 cd report_viewer

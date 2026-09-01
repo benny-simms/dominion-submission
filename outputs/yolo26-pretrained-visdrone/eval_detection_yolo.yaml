@@ -1,7 +1,7 @@
 misc:
   use_cpu: True
   detections_display_output_dir: ./outputs/yolo26-pretrained-visdrone/
-  display_detections: False
+  display_detections: True
   beta: 1.0
   human_review_threshold: 0.95
 model:

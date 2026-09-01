@@ -33,7 +33,6 @@ function ImagePair({ id, modelVersion }) {
           backgroundColor: "var(--panel-bg)"
         }}
       >
-        {/* Ground Truth block */}
         <div style={{ textAlign: "center" }}>
           <h4
             style={{
@@ -51,7 +50,7 @@ function ImagePair({ id, modelVersion }) {
             src={gtSrc}
             alt="ground truth"
             style={{
-              maxWidth: "680px",
+              maxWidth: "800px",
               borderRadius: 4,
               border: "1px solid var(--border)",
               boxShadow: "0 0 12px rgba(0,0,0,0.6)",
@@ -62,7 +61,6 @@ function ImagePair({ id, modelVersion }) {
           />
         </div>
 
-        {/* Prediction block */}
         <div style={{ textAlign: "center" }}>
           <h4
             style={{
@@ -80,7 +78,7 @@ function ImagePair({ id, modelVersion }) {
             src={predSrc}
             alt="prediction"
             style={{
-              maxWidth: "680px",
+              maxWidth: "800px",
               borderRadius: 4,
               border: "1px solid var(--border)",
               boxShadow: "0 0 12px rgba(0,0,0,0.6)",
