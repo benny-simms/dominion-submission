@@ -68,6 +68,7 @@ def main(eval_config_path: str):
     copy(eval_config_path, os.path.join(output_dir, os.path.basename(eval_config_path)))
 
     beta = config.get("misc", dict()).get("beta", 1.0)
+    human_review_threshold = config.get("misc", dict()).get("human_review_threshold", 0.95)
 
     labels_given = all([datum.get("targets") is not None for datum in dataset])
 
@@ -77,7 +78,7 @@ def main(eval_config_path: str):
         )
 
         res = eval_detections(
-            outputs["detections"], [datum["targets"] for datum in dataset],  beta=beta
+            outputs["detections"], [datum["targets"] for datum in dataset],  beta, human_review_threshold,
         )
         metrics = res["metrics"]
         precision = metrics["precision"]
@@ -89,6 +90,8 @@ def main(eval_config_path: str):
         confidence_threshold = confidences[op_ix]
 
         metrics["optimal_confidence_threshold"] = confidence_threshold
+        metrics["model_precision"] = precision[-1]
+        metrics["model_recall"] = recall[-1]
 
         AUC = auc(recall, precision)
 

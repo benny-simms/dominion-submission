@@ -1,6 +1,6 @@
 import sys
 from dataclasses import dataclass
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import torch
@@ -18,6 +18,10 @@ class DetectionPrediction:
     label: int
     correct: bool
     confidence: float
+
+    @property
+    def area(self) -> float:
+        return ((self.bbox[2] - self.bbox[0]) * (self.bbox[3] - self.bbox[1])).item()
 
 
 def mean_average_precision(
@@ -91,10 +95,10 @@ def match_detections_and_ground_truths(detections: np.ndarray, ground_truths: np
 import numpy as np
 
 def precision_recall(
-        predictions: List[List[DetectionPrediction]], n_ground_truth: int
+        predictions: List[List[DetectionPrediction]],
+        n_ground_truth: int
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     all_predictions = [pred for img in predictions for pred in img]
-
     all_predictions = sorted(all_predictions, key=lambda p: p.confidence, reverse=True)
 
     TP = np.array([1 if p.correct else 0 for p in all_predictions])
@@ -110,8 +114,36 @@ def precision_recall(
 
     return precision, recall, confidences
 
+def precision_by_detection_size(
+    predictions: List[List[DetectionPrediction]],
+    large_object_threshold: Numeric
+) -> Tuple[float, float]:
+    all_predictions = [pred for img in predictions for pred in img]
+
+    TP_large, TP_small = 0, 0
+    FP_large, FP_small = 0, 0
+    for pred in all_predictions:
+        if pred.area > large_object_threshold:
+            if pred.correct:
+                TP_large += 1
+            else:
+                FP_large += 1
+        else:
+            if pred.correct:
+                TP_small += 1
+            else:
+                FP_small += 1
+    precision_large = TP_large / (TP_large + FP_large + sys.float_info.min)
+    precision_small = TP_small / (TP_small + FP_small + sys.float_info.min)
+
+    return precision_large, precision_small
+
 def eval_detections(
-        detections: List[Dict[str, Any]], ground_truths: List[Dict[str, Any]], beta: float = 1.0
+        detections: List[Dict[str, Any]],
+        ground_truths: List[Dict[str, Any]],
+        beta: float = 1.0,
+        human_review_threshold: float= 0.95,
+        large_object_threshold: Numeric = 2500
 ) -> Dict[str, Any]:
     det_bboxes = [b["boxes"] for b in detections]
     det_scores = [b["scores"] for b in detections]
@@ -133,9 +165,22 @@ def eval_detections(
     precision, recall, confidences = precision_recall(all_predictions, n_ground_truth)
     f_scores = f_score(precision, recall, beta)
 
+    # subset for small and large predictions
+    precision_large, precision_small = precision_by_detection_size(all_predictions, large_object_threshold)
+
+    conf_ix = np.abs(np.array(confidences) - human_review_threshold).argmin()
+    above_threshold_acc = precision[conf_ix].item()
+    human_review_percentage = (1 - recall[conf_ix]).item()
 
     metrics = {"precision": precision.tolist(), "recall": recall.tolist(),
                "confidences": confidences.tolist(), "f_scores": f_scores.tolist()}
+    metrics["precision_large"] = precision_large
+    metrics["precision_small"] = precision_small
+
+    metrics["human_review_percentage"] = human_review_percentage
+    metrics["above_threshold_acc"] = above_threshold_acc
+
+
     outputs = {"predictions": all_predictions, "metrics": metrics}
 
     return outputs
@@ -158,7 +203,11 @@ def plot_precision_recall_curve(precision: np.ndarray, recall: np.ndarray, show:
         plt.show()
     return figure
 
-def image_report_metrics(predictions: List[DetectionPrediction], ground_truth: Dict[str, Any]) -> Dict[str, Any]:
+def image_report_metrics(
+        predictions: List[DetectionPrediction],
+        ground_truth: Dict[str, Any],
+        large_object_threshold: int = 2500
+) -> Dict[str, Any]:
     """
     Writes an individual report file for each image, detailing
     true and false positive/negative predictions
@@ -180,9 +229,16 @@ def image_report_metrics(predictions: List[DetectionPrediction], ground_truth: D
     metrics["precision"] = precision
     metrics["recall"] = recall
 
-    true_positive_areas = [((pred.bbox[2] - pred.bbox[0]) * (pred.bbox[3] - pred.bbox[1]))
-                            for pred in predictions if pred.correct]
-    #metrics["average_tp_area"] = sum(true_positive_areas) / len(true_positive_areas)
+    true_positive_areas = [pred.area for pred in predictions if pred.correct]
+    false_positive_areas = [pred.area for pred in predictions if not pred.correct]
+
+    TP_large = len([area for area in true_positive_areas if area > large_object_threshold])
+    TP_small = TP - TP_large
+    FP_large = len([area for area in false_positive_areas if area > large_object_threshold])
+    FP_small = FP - FP_large
+
+    metrics["precision_large"] = TP_large / (TP_large + FP_large + sys.float_info.min)
+    metrics["precision_small"] = TP_small / (TP_small + FP_small + sys.float_info.min)
+    metrics["average_true_positive_detection"] = sum(true_positive_areas) / len(true_positive_areas)
 
     return metrics
-
