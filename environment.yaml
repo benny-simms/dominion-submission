@@ -1,4 +1,4 @@
-name: dominion-dynamics
+name: dominion-submission
 channels:
   - defaults
 dependencies:
@@ -85,4 +85,3 @@ dependencies:
       - uvicorn==0.52.4
       - watchfiles==1.2.0
       - websockets==17.1
-prefix: C:\Users\lauha\miniconda3\envs\dominion-dynamics

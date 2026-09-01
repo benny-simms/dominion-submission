@@ -9,6 +9,7 @@ from src.models.yolo_detection import YOLODetection
 
 
 def initialize_dataset(dataset_name: str, split_name: str, config: Dict[str, Any]) -> Dataset:
+    """Loads an arbitrary PyTorch Dataset"""
     if split_name not in ["train, validation", "test"]:
         raise ValueError(f"split_name: {split_name} should be train, validation or test")
     if dataset_name == "vis_drone":
@@ -21,6 +22,7 @@ def initialize_dataset(dataset_name: str, split_name: str, config: Dict[str, Any
 def initialize_model(
     model_name: str, class_config: Optional[Dict[int, str]], config: Dict[str, Any], device: Device, weights_file_path: Optional[str] = None
 ) -> Module:
+    """Loads an arbitrary PyTorch Module"""
     if model_name == "yolo":
         model = YOLODetection(class_config=class_config, **config)
     else:

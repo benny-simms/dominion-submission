@@ -14,6 +14,13 @@ from src.utils.data_manipulations import data_to_tensor
 
 
 class VisDroneSample:
+    """
+    Sample object for a given VisDrone image and corresponding labels
+    ----------
+    filename: relative path to image file
+    image: H x W x 3 array
+    labels: List of (class_id, x, y, h, w) objects
+    """
     def __init__(
         self,
         filename: str,
@@ -56,6 +63,17 @@ class VisDroneDataset(Dataset):
         class_config_path: Optional[str] = None,
         image_size: Optional[Tuple[int, int]] = None
     ):
+        """
+        Dataset class to load and preprocess image label pairs from the VisDrone dataset
+        ----------
+        data_path: root containing each image/label folder
+        split_type: specifies train/test/val data
+        split_filename: path to the list of filenames to subset. If none, load every file from folder
+        single_class_detection: if true, defaults every class label to 1
+        class_config_path: yaml file containing mapping between classes and ids, and ids to id_name
+           useful for grouping classes, mapping them to another model schema or displaying detections by class
+        image_size: if not None, resizes images and bounding box to a HxW format
+        """
         self.data_path = data_path
         self.single_class_detection = single_class_detection
         self.image_size = image_size

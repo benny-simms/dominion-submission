@@ -9,7 +9,16 @@ def generate_random_splits(
     train_split: float = 0.8,
     validation_split: float = 0.1
 ):
-    """Generates random splits using the filenames from a folder as unique IDs"""
+    """
+    Generates random splits using the filenames from a folder as unique IDs
+    Defaults to a standard 80/10/10 split
+    ----------
+    n_ids: size of combined train/val/test data samples
+    input_folder: data root containing the image/label files
+    output_folder: folder to save split file paths
+    train_split: proportion of training data, must be between 0 and 1
+    validation_split: proportion of validation data, must be between 0 and 1
+    """
     os.makedirs(output_folder, exist_ok=True)
 
     assert 0 < (train_split + validation_split) < 1, "Split values must sum to 1"

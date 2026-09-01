@@ -22,6 +22,11 @@ from src.utils.process_data import evaluate
 
 
 def main(eval_config_path: str):
+    """
+    Main loop for evaluating an arbitrary model against an arbitrary dataset or data collection
+    -----------
+    eval_config_path: path to the evaluation configuration file (in yaml format)
+    """
     if eval_config_path:
         with open(eval_config_path, 'r') as f:
             config = yaml.load(f, yaml.SafeLoader)

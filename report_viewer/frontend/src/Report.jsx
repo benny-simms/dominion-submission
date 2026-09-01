@@ -11,13 +11,12 @@ function Report({ id, modelVersion}) {
             .catch(err => console.error("Report fetch error:", err));
     }, [id, modelVersion]);
 
-    // Model‑wide metrics (metrics.json)
     useEffect(() => {
         fetch(`http://localhost:8000/model_metrics`)
             .then(res => res.json())
             .then(setModelMetrics)
             .catch(err => console.error("Model metrics fetch error:", err));
-    }, [modelVersion]);   // ← only depends on dataset toggle
+    }, [modelVersion]);
 
     if (!report) {
         return (

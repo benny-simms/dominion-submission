@@ -27,6 +27,14 @@ def encompassing_bbox(bbox_1: Tensor, bbox_2: Tensor) -> Tensor:
 def overlapping_detections_merging(
     boxes: Tensor, scores: Tensor, labels: Tensor, box_ioa_threshold: float = 0.25
 ) -> Tuple[Tensor, Tensor, Tensor]:
+    """
+    Identifies overlapping bounding boxes and merges them, preserving the maximum dimensions of each box
+    ---------
+    boxes: (N, 4) tensor of bounding box co-ordinates (in xyxy format)
+    scores: (N) tensor of class scores between 0 and 1
+    labels: (M) tensor of class labels corresponding to each box
+    box_ioa_threshold: intersection over area threshold to consider boxes overlapping
+    """
     ioa = calculate_ioa(boxes)
     mask = ioa > box_ioa_threshold
 
@@ -52,6 +60,16 @@ def overlapping_detections_merging(
 def overlapping_detections_suppression(
     boxes: Tensor, scores: Tensor, labels: Tensor, box_ioa_threshold: float = 0.25
 ) -> Tuple[Tensor, Tensor, Tensor]:
+    """
+    Performs a form of Non-Maximum Suppression (NMS) on overlapping boxes.
+    The intent is to preserve the highest confidence detection and discard others in a neighbourhood
+        around it
+    -----------
+    boxes: (N, 4) tensor of bounding box co-ordinates (in xyxy format)
+    scores: (N) tensor of class scores between 0 and 1
+    labels: (M) tensor of class labels corresponding to each box
+    box_ioa_threshold: intersection over area threshold to consider boxes overlapping
+    """
     ioa = calculate_ioa(boxes)
 
     ix_to_remove = torch.zeros((ioa.shape[0],), dtype=torch.bool)

@@ -16,6 +16,14 @@ def draw_detections(
     figure_size_inches: Optional[Tuple[float, float]] = None,
     show: bool = True
 ):
+    """
+    Draws detections over a static image
+    -----------
+    image: input image in H X W X C format
+    predictions: list of DetectionPrediction objects detailing the bounding box, confidence, label and correctness
+    ground_truth: list of ground_truth objects to overlay an image
+    font_size: size of label/confidences
+    """
     figure, axes = plt.subplots(num=figure_id)
 
     figure.patch.set_facecolor("black")

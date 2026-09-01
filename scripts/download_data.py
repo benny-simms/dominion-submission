@@ -7,8 +7,14 @@ from ultralytics.utils.downloads import download
 from ultralytics.utils import ASSETS_URL, TQDM
 
 
-def visdrone2yolo(dir, split, source_name=None):
-    """Convert VisDrone annotations to YOLO format with images/{split} and labels/{split} structure."""
+def visdrone2yolo(dir: str, split: str, source_name: bool = None):
+    """
+    Convert VisDrone annotations to YOLO format with images/{split} and labels/{split} structure.
+    Adapted from: https://docs.ultralytics.com/datasets/detect/visdrone
+    ----------
+    dir: output directory
+    split: split type, must be one of: train, test or val
+    """
 
     source_dir = dir / (source_name or f"VisDrone2019-DET-{split}")
     images_dir = dir / "images" / split
@@ -38,19 +44,19 @@ def visdrone2yolo(dir, split, source_name=None):
 
         (labels_dir / f.name).write_text("".join(lines), encoding="utf-8")
 
+if __name__ == "__main__":
+    # Download (ignores test-challenge split)
+    dir = Path("./data/VisDrone2019-DET/")  # dataset root dir
+    urls = [
+        f"{ASSETS_URL}/VisDrone2019-DET-train.zip",
+        f"{ASSETS_URL}/VisDrone2019-DET-val.zip",
+        f"{ASSETS_URL}/VisDrone2019-DET-test-dev.zip",
+        # f"{ASSETS_URL}/VisDrone2019-DET-test-challenge.zip",
+    ]
+    download(urls, dir=dir, threads=4)
 
-# Download (ignores test-challenge split)
-dir = Path("./data/VisDrone2019-DET/")  # dataset root dir
-urls = [
-    f"{ASSETS_URL}/VisDrone2019-DET-train.zip",
-    f"{ASSETS_URL}/VisDrone2019-DET-val.zip",
-    f"{ASSETS_URL}/VisDrone2019-DET-test-dev.zip",
-    # f"{ASSETS_URL}/VisDrone2019-DET-test-challenge.zip",
-]
-download(urls, dir=dir, threads=4)
-
-# Convert
-splits = {"VisDrone2019-DET-train": "train", "VisDrone2019-DET-val": "val", "VisDrone2019-DET-test-dev": "test"}
-for folder, split in splits.items():
-    visdrone2yolo(dir, split, folder)  # convert VisDrone annotations to YOLO labels
-    shutil.rmtree(dir / folder)  # cleanup original directory
+    # Convert
+    splits = {"VisDrone2019-DET-train": "train", "VisDrone2019-DET-val": "val", "VisDrone2019-DET-test-dev": "test"}
+    for folder, split in splits.items():
+        visdrone2yolo(dir, split, folder)  # convert VisDrone annotations to YOLO labels
+        shutil.rmtree(dir / folder)  # cleanup original directory

@@ -27,7 +27,7 @@ def get_dirs():
 def fmt(item_id: str):
     return f"{int(item_id):05d}"
 
-# CORS so React (Vite dev server) can talk to FastAPI
+# CORS so React can talk to FastAPI
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],

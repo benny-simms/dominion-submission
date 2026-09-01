@@ -43,7 +43,6 @@ function App() {
         .then(newItems => {
           setItems(newItems);
 
-          // preserve index
           setIndex(i => {
             if (i >= newItems.length) return newItems.length - 1;
             return i;
@@ -52,7 +51,6 @@ function App() {
           setModelVersion(v => v + 1);
         });
 
-      // refresh model name
       fetch("http://localhost:8000/model_name")
         .then(res => res.json())
         .then(data => setModelName(data.name));

@@ -31,7 +31,19 @@ YOLO_SAFE_GLOBALS = [
 ]
 
 class YOLODetection(Module):
-    "Wrapper around the ultralytics YOLO model. This model can only be used for inference and will crash in training"
+    """
+    Wrapper around the ultralytics YOLO model.
+    This model can only be used for inference and will crash in training
+    ----------
+    model_path: path to the torch weights file
+    class_config: hashmap of class ids to class labels
+        removes a prediction if it is not within the set of class labels
+    box_iou_threshold: intersection over union threshold for determining suppression/merging detections
+    box_ioa_threshold: intersection over area threshold for determining suppression/merging detections
+    suppress_overlapping_boxes: if True, performs non-maximum suppression on detections
+    merge_overlapping_boxes: if True, merges overlapping boxes into grouped predictions
+    single_class_detection: if True, coerces outputs into a single class prediction
+    """
 
     def __init__(
         self,
