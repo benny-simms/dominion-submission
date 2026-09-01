@@ -93,6 +93,11 @@ def main(eval_config_path: str):
         metrics["model_precision"] = precision[-1]
         metrics["model_recall"] = recall[-1]
 
+        metrics["human_review_confidence"] = human_review_threshold
+        metrics["mAP"] = mAP
+        metrics["mAP_50"] = mAP_50
+        metrics["mAP_75"] = mAP_75
+
         AUC = auc(recall, precision)
 
         performance_message = (
@@ -110,7 +115,6 @@ def main(eval_config_path: str):
         with open(os.path.join(output_dir, "performance.log"), "wt") as outfile:
             outfile.write(performance_message)
         with open(os.path.join(output_dir, "metrics.json"), "w") as outfile:
-            metrics = json.dumps(metrics, default=lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
             json.dump(metrics, outfile, indent=4)
 
         precision_recall_curve = plot_precision_recall_curve(precision, recall, show=display_detections)

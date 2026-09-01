@@ -1,14 +1,14 @@
 misc:
   use_cpu: True
   detections_display_output_dir: ./outputs/yolo26-finetuned-visdrone/
-  display_detections: True
+  display_detections: False
   beta: 1.0
   human_review_threshold: 0.95
 model:
     type: yolo
     model_path: ./models/yolo26-detection-finetuned/yolo26n-best.pt
     merge_overlapping_bboxes: False
-    suppress_overlapping_bboxes: False
+    suppress_overlapping_bboxes: True
     single_class_detection: True
 dataset:
   type: vis_drone

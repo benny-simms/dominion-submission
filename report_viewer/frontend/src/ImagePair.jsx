@@ -1,14 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "../index.css";
 
-function ImagePair({ id, modelVersion}) {
+function ImagePair({ id, modelVersion }) {
   const [gtSrc, setGtSrc] = useState("");
   const [predSrc, setPredSrc] = useState("");
 
   useEffect(() => {
-    // Build URLs fresh each time dataset changes
-    const gtUrl = `http://localhost:8000/ground_truth/${id}`;
-    const predUrl = `http://localhost:8000/predictions/${id}`;
+    const gtUrl = `http://localhost:8000/ground_truth/${id}?v=${modelVersion}`;
+    const predUrl = `http://localhost:8000/predictions/${id}?v=${modelVersion}`;
 
     setGtSrc(gtUrl);
     setPredSrc(predUrl);
@@ -26,7 +25,6 @@ function ImagePair({ id, modelVersion}) {
         alignItems: "center"
       }}
     >
-      {/* Images side-by-side */}
       <div
         style={{
           display: "flex",
@@ -97,4 +95,4 @@ function ImagePair({ id, modelVersion}) {
   );
 }
 
-export default ImagePair
+export default ImagePair;

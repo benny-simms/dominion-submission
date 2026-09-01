@@ -9,8 +9,8 @@ from fastapi.responses import FileResponse, JSONResponse
 app = FastAPI()
 
 # Adjust if your data folder is elsewhere
-PRETRAINED_OUTPUTS = "../../outputs/visdrone_yolo26/"
-FINETUNED_OUTPUTS = "../../outputs/visdrone_two/"\
+PRETRAINED_OUTPUTS = "../../outputs/yolo26-pretrained-visdrone/"
+FINETUNED_OUTPUTS = "../../outputs/yolo26-finetuned-visdrone/"
 
 PRETRAINED_MODEL_NAME = "Pretrained Model"
 FINETUNED_MODEL_NAME = "Fine-tuned Model"
@@ -80,4 +80,14 @@ def model_name():
     return {
         "name": PRETRAINED_MODEL_NAME if active_directory == PRETRAINED_OUTPUTS else FINETUNED_MODEL_NAME
     }
+
+@app.get("/model_metrics")
+def get_model_metrics():
+    metrics_path = os.path.join(active_directory, "metrics.json")
+
+    if not os.path.exists(metrics_path):
+        return {"error": "metrics.json not found"}
+
+    with open(metrics_path, "r") as f:
+        return json.load(f)
 

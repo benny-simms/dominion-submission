@@ -107,7 +107,7 @@ class YOLODetection(Module):
 
 
             if self.single_class_detection:
-                labels = torch.ones(len(labels), dtype=int)
+                labels = torch.ones(len(labels), dtype=torch.int32)
 
             detections.append({"boxes": boxes, "labels": labels, "scores": scores})
 

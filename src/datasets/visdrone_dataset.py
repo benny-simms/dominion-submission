@@ -2,7 +2,7 @@ import math
 import os
 import yaml
 from collections import defaultdict
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import cv2
 import matplotlib.pyplot as plt
@@ -54,9 +54,11 @@ class VisDroneDataset(Dataset):
         split_filename: Optional[str] = None,
         single_class_detection: bool = False,
         class_config_path: Optional[str] = None,
+        image_size: Optional[Tuple[int, int]] = None
     ):
         self.data_path = data_path
         self.single_class_detection = single_class_detection
+        self.image_size = image_size
 
         self._samples = []
 
@@ -170,6 +172,11 @@ class VisDroneDataset(Dataset):
 
     def __getitem__(self, index: int) -> Dict[str, Any]:
         image = self.samples[index].image
+        if self.image_size is not None:
+            image = cv2.resize(image, self.image_size, interpolation=cv2.INTER_LINEAR)
+            img_size = self.image_size
+        else:
+            img_size = image.shape[:2]
 
         labels = self.samples[index].labels
         if self.single_class_detection:
@@ -178,7 +185,7 @@ class VisDroneDataset(Dataset):
             class_ids = [det[0] for det in labels]
             class_ids = np.array(class_ids)
 
-        bboxes = [self.convert_yolo_to_xyxy(det[1:], *image.shape[:2])
+        bboxes = [self.convert_yolo_to_xyxy(det[1:], *img_size)
                   for det in labels]
         bboxes = np.array(bboxes).astype(np.float32).reshape((-1, 4))
 

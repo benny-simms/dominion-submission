@@ -239,6 +239,6 @@ def image_report_metrics(
 
     metrics["precision_large"] = TP_large / (TP_large + FP_large + sys.float_info.min)
     metrics["precision_small"] = TP_small / (TP_small + FP_small + sys.float_info.min)
-    metrics["average_true_positive_detection"] = sum(true_positive_areas) / len(true_positive_areas)
+    metrics["average_true_positive_detection"] = sum(true_positive_areas) / (len(true_positive_areas) + sys.float_info.min)
 
     return metrics
